@@ -133,9 +133,11 @@ public class Chronic {
    */
   protected static String preNormalize(String text) {
     String normalizedText = text.toLowerCase();
-    normalizedText = Chronic.numericizeNumbers(normalizedText);
     normalizedText = normalizedText.replaceAll("['\"\\.]", "");
     normalizedText = normalizedText.replaceAll("([/\\-,@])", " $1 ");
+    normalizedText = normalizedText.replaceAll("\\bsecond " +
+    		"(of|day|month|hour|minute|second)\\b", "2nd $1");
+    normalizedText = Chronic.numericizeNumbers(normalizedText);
     normalizedText = normalizedText.replaceAll("\\btoday\\b", "this day");
     normalizedText = normalizedText.replaceAll("\\btomm?orr?ow\\b", "next day");
     normalizedText = normalizedText.replaceAll("\\byesterday\\b", "last day");

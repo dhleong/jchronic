@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 
 public class Numerizer {
   protected static class DirectNum {
-    private Pattern _name;
-    private String _number;
+    private final Pattern _name;
+    private final String _number;
     
     public DirectNum(String name, String number) {
       _name = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
@@ -24,9 +24,26 @@ public class Numerizer {
     }
   }
   
+  protected static class Ordinal extends DirectNum {
+      private final String _suffix;
+      public Ordinal(String name, String number) {
+        super(name, number);
+        _suffix = name.substring(name.length()-2);
+      }
+      
+      public final String getSuffix() {
+          return _suffix;
+      }
+      
+      @Override
+    public String getNumber() {
+          return super.getNumber() + getSuffix(); 
+      }
+  }
+  
   protected static class Prefix {
-    private Pattern _name;
-    private long _number;
+    private final Pattern _name;
+    private final long _number;
     
     public Prefix(Pattern name, long number) {
       _name = name;
@@ -55,6 +72,7 @@ public class Numerizer {
   }
   
   protected static DirectNum[] DIRECT_NUMS;
+  protected static Ordinal[] ORDINALS;
   protected static TenPrefix[] TEN_PREFIXES;
   protected static BigPrefix[] BIG_PREFIXES;
    
@@ -83,6 +101,18 @@ public class Numerizer {
     directNums.add(new DirectNum("ten", "10"));
     directNums.add(new DirectNum("\\ba\\b", "1"));
     Numerizer.DIRECT_NUMS = directNums.toArray(new DirectNum[directNums.size()]);
+    
+    List<Ordinal> ordinals = new LinkedList<Ordinal>();
+    ordinals.add(new Ordinal("first", "1"));
+    ordinals.add(new Ordinal("third", "3"));
+    ordinals.add(new Ordinal("fourth", "4"));
+    ordinals.add(new Ordinal("fifth", "5"));
+    ordinals.add(new Ordinal("sixth", "6"));
+    ordinals.add(new Ordinal("seventh", "7"));
+    ordinals.add(new Ordinal("eighth", "8"));
+    ordinals.add(new Ordinal("ninth", "9"));
+    ordinals.add(new Ordinal("tenth", "10"));
+    Numerizer.ORDINALS = ordinals.toArray(new Ordinal[ordinals.size()]);
     
     List<TenPrefix> tenPrefixes = new LinkedList<TenPrefix>();
     tenPrefixes.add(new TenPrefix("twenty", 20));
@@ -124,6 +154,11 @@ public class Numerizer {
     // easy/direct replacements
     for (DirectNum dn : Numerizer.DIRECT_NUMS) {
       numerizedStr = dn.getName().matcher(numerizedStr).replaceAll(dn.getNumber());
+    }
+    
+    // ordinals
+    for (Ordinal o : Numerizer.ORDINALS) {
+        numerizedStr = o.getName().matcher(numerizedStr).replaceAll(o.getNumber());
     }
     
     // ten, twenty, etc.
