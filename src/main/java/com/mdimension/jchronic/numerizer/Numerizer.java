@@ -112,10 +112,12 @@ public class Numerizer {
     ordinals.add(new Ordinal("eighth", "8"));
     ordinals.add(new Ordinal("ninth", "9"));
     ordinals.add(new Ordinal("tenth", "10"));
+    ordinals.add(new Ordinal("twelfth", "12"));
     Numerizer.ORDINALS = ordinals.toArray(new Ordinal[ordinals.size()]);
     
     List<TenPrefix> tenPrefixes = new LinkedList<TenPrefix>();
-    tenPrefixes.add(new TenPrefix("twenty", 20));
+    // ie case for ordinals... probably won't need even for twenty, but just in case
+    tenPrefixes.add(new TenPrefix("twent(?:y|ie)", 20)); 
     tenPrefixes.add(new TenPrefix("thirty", 30));
     tenPrefixes.add(new TenPrefix("fourty", 40));
     tenPrefixes.add(new TenPrefix("fifty", 50));
