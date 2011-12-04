@@ -135,7 +135,8 @@ public class Numerizer {
     Numerizer.BIG_PREFIXES = bigPrefixes.toArray(new BigPrefix[bigPrefixes.size()]);
   }
 
-  private static final Pattern DEHYPHENATOR = Pattern.compile(" +|(\\D)-(\\D)");
+//  private static final Pattern DEHYPHENATOR = Pattern.compile(" +|(\\D)-(\\D)"); // this can add nulls willy-nilly...
+  private static final Pattern DEHYPHENATOR = Pattern.compile("(\\D)-(\\D)");
   private static final Pattern DEHALFER = Pattern.compile("a half", Pattern.CASE_INSENSITIVE);
   private static final Pattern DEHAALFER = Pattern.compile("(\\d+)(?: | and |-)*haAlf", Pattern.CASE_INSENSITIVE);
   private static final Pattern ANDITION_PATTERN = Pattern.compile("(\\d+)( | and )(\\d+)(?=\\W|$)");
