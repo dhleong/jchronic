@@ -3,9 +3,9 @@ package com.mdimension.jchronic;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.mdimension.jchronic.numerizer.Numerizer;
-
 import junit.framework.TestCase;
+
+import com.mdimension.jchronic.numerizer.Numerizer;
 
 public class NumerizerTestCase extends TestCase {
   public void testStraightParsing() {
@@ -52,4 +52,22 @@ public class NumerizerTestCase extends TestCase {
       assertEquals(value.intValue(), Integer.parseInt(Numerizer.numerize(str)));
     }
   }
+  
+  public void testOrdinalStrings() {
+      Map<String, String> strings = new LinkedHashMap<String, String>();
+      strings.put("1st", "first");
+      strings.put("second", "second");
+      strings.put("2nd day", "second day");
+      strings.put("2nd of may", "second of may");
+      strings.put("5th", "fifth");
+      strings.put("23rd", "twenty third");
+      strings.put("1st day month 2", "first day month two");
+
+      for (String value : strings.keySet()) {
+        // Use pre_normalize here instead of Numerizer directly because
+        // pre_normalize deals with parsing 'second' appropriately
+        String str = strings.get(value);
+        assertEquals(value, Chronic.preNormalize(str));
+      }
+    }
 }
